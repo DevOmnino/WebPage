@@ -1,1 +1,1 @@
-This is Initiall design of the website
+This is Initial design of the website 
