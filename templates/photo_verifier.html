@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}     
+
+<section class="py-5 bg-light">
+    <div class="container" style="display: flex; flex-direction: column; align-items: center;">
+        <div class="form-container">
+            <h2 class="form-title">Upload Image</h2>
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <!-- Single-image selector -->
+                 <div class="form-group">
+                    <label for="imageInput">Upload Images</label>
+                    <div class="input-wrapper">
+                        <input type="file" id="imageInput" accept="image/*">
+                    </div>
+                </div>
+
+                <!-- Preview area -->
+                <div id="previewContainer"
+                    style="display:flex; flex-wrap:wrap; gap:10px; margin-top:15px;">
+                </div>
+
+                <!-- Hidden input that actually submits files -->
+                <input type="file" name="images" id="hiddenInput" multiple hidden> 
+
+                <div class="form-group">
+                    <label for="{{ form.description.id_for_label }}">{{form.description.label}}</label>
+                    <div class="input-wrapper">
+                            {{ form.description }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.date.id_for_label }}">{{form.date.label}}</label>
+                    <div class="input-wrapper">
+                            {{ form.date }}
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn-primary">Submit</button>
+                    <button type="reset" class="btn-secondary" id="resetBtn">Reset</button>
+                </div>
+            
+            </form>
+        </div>
+
+        {% if result %}
+            <div class="result-container" style="display:flex; flex-direction: column; align-items:center;margin-top:20px;">
+                {% for res in result%}
+                    {% if res.result.confidences.0.confidence < 0.6 %}
+                        <h2 style ="color : orange;">Upload a clear image of {{res.filename}} image </h2>
+                    {% elif res.result.label == 'Real' %}
+                        <h2 style ="color : green;">The {{res.filename}} image is Real</h2>
+                    {% else %}
+                        <h2 style ="color : red;">The {{res.filename}} image is Fake</h2>
+                    {% endif %} 
+                {%endfor%} 
+            </div> 
+        {%endif%} 
+    </div>    
+</section>
+ {% endblock %}
+
+{% block extra_scripts %}   
+    <script>
+        const imageInput = document.getElementById("imageInput");
+        const hiddenInput = document.getElementById("hiddenInput");
+        const previewContainer = document.getElementById("previewContainer");
+        const resetBtn = document.getElementById("resetBtn");
+
+        let selectedFiles = [];
+
+        imageInput.addEventListener("change", function () {
+            const file = this.files[0];
+            if (!file || !file.type.startsWith("image/")) return;
+
+            selectedFiles.push(file);
+            updateUI();
+            this.value = ""; // allow re-selecting same file
+        });
+
+        function updateUI() {
+            previewContainer.innerHTML = "";
+
+            const dataTransfer = new DataTransfer();
+
+            selectedFiles.forEach((file, index) => {
+                dataTransfer.items.add(file);
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const wrapper = document.createElement("div");
+                    wrapper.style.position = "relative";
+
+                    const img = document.createElement("img");
+                    img.src = e.target.result;
+                    img.style.maxWidth = "120px";
+                    img.style.border = "1px solid #ccc";
+                    img.style.padding = "5px";
+
+                    const removeBtn = document.createElement("button");
+                    removeBtn.innerHTML = "X";
+                    removeBtn.style.position = "absolute";
+                    removeBtn.style.top = "0";
+                    removeBtn.style.right = "0";
+                    removeBtn.style.background = "grey"; 
+                    removeBtn.style.color = "black";
+                    removeBtn.style.border = "none";
+                    removeBtn.style.cursor = "pointer";
+
+                    removeBtn.onclick = () => {
+                        selectedFiles.splice(index, 1);
+                        updateUI();
+                    };
+
+                    wrapper.appendChild(img);
+                    wrapper.appendChild(removeBtn);
+                    previewContainer.appendChild(wrapper);
+                };
+                reader.readAsDataURL(file);
+            });
+
+            hiddenInput.files = dataTransfer.files;
+        }
+
+        resetBtn.addEventListener("click", () => {
+            selectedFiles = [];
+            previewContainer.innerHTML = "";
+        });
+    </script>
+{% endblock %}

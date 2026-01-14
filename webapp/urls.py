@@ -4,7 +4,7 @@ from .views import *
 app_name = 'inbox'
 
 urlpatterns = [
-    path('', home, name="home"),
-    path('claims/', claims, name="claims"),
-    path('calculate_acv/', calculate_acv, name="calculate_acv"),
+    path('', landing, name="landing"),
+    path('acv_calculator/', acv_calculator, name="acv_calculator"),
+    path('photo-verifier/', photo_verifier, name="photo_verifier"),
 ]

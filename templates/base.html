@@ -16,150 +16,14 @@
         <nav>
             <div class="logo">Logo</div>
             <ul class="nav-links">
-                <li><a href="{% url 'inbox:home' %}">Home</a></li>
+                <li><a href="{% url 'inbox:landing' %}">Home</a></li>
                 <li><a href="#features">Features</a></li>
                 <li><a href="#how-it-works">How It Works</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
-            <a href="{% url 'inbox:claims' %}" class="btn-primary" style="padding: 10px 24px;">Get Started</a>
+            <a href="{% url 'inbox:photo_verifier' %}" class="btn-primary" style="padding: 10px 24px;">Get Started</a>
         </nav>
     </header>
-
-    {% comment %} <!-- Hero Section -->
-    <section id="home" class="hero-gradient" style="padding: 120px 0;">
-        <div class="container" style="text-align: center; color: white;">
-            <h1 style="font-size: 56px; font-weight: bold; margin-bottom: 24px; line-height: 1.2;">
-                Instant Property Insurance<br>Claims Processing
-            </h1>
-            <p style="font-size: 20px; margin-bottom: 40px; opacity: 0.95; max-width: 600px; margin-left: auto; margin-right: auto;">
-                Automate your insurance claims in minutes, not days. Get approved faster with AI-powered claim automation.
-                <br> For claims under ₹5 lakh.
-            </p>
-            <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-                <a href="{% url 'inbox:claims' %}" class="btn-secondary">Start Your Claim</a>
-                <a href="#how-it-works" class="btn-primary" style="background: rgba(255, 255, 255, 0.2); border-color: white;">Learn More →</a>
-            </div>
-            
-            <!-- Stats -->
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 48px; margin-top: 80px;">
-                <div class="stat-card">
-                    <div class="stat-number" style="color: white;">98%</div>
-                    <div style="font-size: 18px;">Approval Rate</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" style="color: white;">Minutes</div>
-                    <div style="font-size: 18px;"> Claim Processing </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" style="color: white;">50K+</div>
-                    <div style="font-size: 18px;">Claims Processed</div>
-                </div>    
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="features">
-        <div class="container">
-            <div style="text-align: center; margin-bottom: 64px;">
-                <h2 style="font-size: 42px; font-weight: bold; color: #1a1a1a; margin-bottom: 16px;">Why Choose Us?</h2>
-                <p style="font-size: 18px; color: #666; max-width: 600px; margin: 0 auto;">
-                    Experience the future of insurance claims with our cutting-edge automation platform
-                </p>
-            </div>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px;">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <span style="font-size: 32px;">⚡</span>
-                    </div>
-                    <h3 style="font-size: 24px; font-weight: bold; margin-bottom: 12px; color: #1a1a1a;">Lightning Fast</h3>
-                    <p style="color: #666; line-height: 1.6;">Submit and process claims in under few minutes with our AI-powered automation system.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <span style="font-size: 32px;">🔒</span>
-                    </div>
-                    <h3 style="font-size: 24px; font-weight: bold; margin-bottom: 12px; color: #1a1a1a;">Secure & Compliant</h3>
-                    <p style="color: #666; line-height: 1.6;">Bank-level encryption and full compliance with insurance regulations ensure your data is protected.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <span style="font-size: 32px;">📱</span>
-                    </div>
-                    <h3 style="font-size: 24px; font-weight: bold; margin-bottom: 12px; color: #1a1a1a;">Mobile Ready</h3>
-                    <p style="color: #666; line-height: 1.6;">File claims on-the-go with our mobile-optimized platform. Take photos and upload instantly.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <span style="font-size: 32px;">🤖</span>
-                    </div>
-                    <h3 style="font-size: 24px; font-weight: bold; margin-bottom: 12px; color: #1a1a1a;">AI-Powered</h3>
-                    <p style="color: #666; line-height: 1.6;">Advanced AI analyzes damage and validates claims automatically for faster approvals.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <span style="font-size: 32px;">💰</span>
-                    </div>
-                    <h3 style="font-size: 24px; font-weight: bold; margin-bottom: 12px; color: #1a1a1a;">Instant Payouts</h3>
-                    <p style="color: #666; line-height: 1.6;">Get your claim payout deposited directly to your account within 24 hours of approval.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <span style="font-size: 32px;">📊</span>
-                    </div>
-                    <h3 style="font-size: 24px; font-weight: bold; margin-bottom: 12px; color: #1a1a1a;">Real-Time Tracking</h3>
-                    <p style="color: #666; line-height: 1.6;">Monitor your claim status in real-time with detailed updates at every step of the process.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- How It Works Section -->
-    <section id="how-it-works" class="bg-light">
-        <div class="container">
-            <div style="text-align: center; margin-bottom: 64px;">
-                <h2 style="font-size: 42px; font-weight: bold; color: #1a1a1a; margin-bottom: 16px;">How It Works</h2>
-                <p style="font-size: 18px; color: #666;">File your property insurance claim in three simple steps</p>
-            </div>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 48px;">
-                <div style="text-align: center;">
-                    <div class="step-number" style="margin-left: auto; margin-right: auto;">1</div>
-                    <h3 style="font-size: 24px; font-weight: bold; margin-bottom: 12px; color: #1a1a1a;">Report Damage</h3>
-                    <p style="color: #666; line-height: 1.6;">Upload photos and describe the property damage using our simple form. Our AI guides you through the process.</p>
-                </div>
-                
-                <div style="text-align: center;">
-                    <div class="step-number" style="margin-left: auto; margin-right: auto;">2</div>
-                    <h3 style="font-size: 24px; font-weight: bold; margin-bottom: 12px; color: #1a1a1a;">AI Assessment</h3>
-                    <p style="color: #666; line-height: 1.6;">Our advanced AI analyzes your claim, validates documentation, and estimates repair costs automatically.</p>
-                </div>
-                
-                <div style="text-align: center;">
-                    <div class="step-number" style="margin-left: auto; margin-right: auto;">3</div>
-                    <h3 style="font-size: 24px; font-weight: bold; margin-bottom: 12px; color: #1a1a1a;">Get Approved</h3>
-                    <p style="color: #666; line-height: 1.6;">Receive instant approval and payout within 24 hours. Track everything in real-time from your dashboard.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section style="background-color: #FF6B35; padding: 80px 0;">
-        <div class="container" style="text-align: center; color: white;">
-            <h2 style="font-size: 42px; font-weight: bold; margin-bottom: 24px;">Ready to File Your Claim?</h2>
-            <p style="font-size: 20px; margin-bottom: 40px; opacity: 0.95;">
-                Join thousands of satisfied customers who've experienced hassle-free claims
-            </p>
-            <a href="#" class="btn-secondary">Start Your Claim Now →</a>
-        </div>
-    </section> {% endcomment %}
 
     {%block content%} {%endblock%}
 
@@ -179,7 +43,7 @@
                         <li><a href="#">Pricing</a></li>
                         <li><a href="#how-it-works">How It Works</a></li>
                         <li><a href="#">FAQ</a></li>
-                        <li><a href="{% url 'inbox:calculate_acv' %}">ACV Calculator</a></li>
+                        <li><a href="{% url 'inbox:acv_calculator' %}">ACV Calculator</a></li>
                     </ul>
                 </div>
                 

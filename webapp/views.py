@@ -6,13 +6,13 @@ import tempfile
 
 # Create your views here.
 
-def home(request):
-    return render(request, 'index.html')
+def landing(request):
+    return render(request, 'landing.html')
 
 def real_or_fake(uploaded_file):
     client = Client("DevOmnino/Test")
-
-    ext = os.path.splitext(uploaded_file.name)[1]
+    filename = uploaded_file.name
+    ext = os.path.splitext(filename)[1]
     with tempfile.NamedTemporaryFile(delete=False, suffix=ext) as temp_file:
         for chunk in uploaded_file.chunks():
             temp_file.write(chunk)
@@ -25,28 +25,35 @@ def real_or_fake(uploaded_file):
         )
     finally :
         os.remove(temp_path)
-    return result
+    return {
+        "result": result,
+        "filename": filename
+    }
 
-def claims(request):
+def photo_verifier(request):
     result = None
 
     if request.method == 'POST':
-        form = ImageUploadForm(request.POST, request.FILES)
+        form = ImageUploadForm(request.POST)
         if form.is_valid():
-            image = form.cleaned_data['image']
+            images = request.FILES.getlist('images')
             description = form.cleaned_data['description']
             date = form.cleaned_data['date']
-            result = real_or_fake(image)
+            results = []
+
+            for image in images:
+                res = real_or_fake(image)
+                results.append(res)
+            result = results
     else:
         form = ImageUploadForm()
-    # result = real_or_fake("/workspaces/WebPage/static/images/real-image2.jpg")
     context = {
         'form': form,
         'result': result
     }
-    return render(request, 'model.html', context)
+    return render(request, 'photo_verifier.html', context)
 
-def calculate_acv(request):
+def acv_calculator(request):
     acv = None
     original_cost = None
     age = None
