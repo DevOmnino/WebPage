@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from gradio_client import Client, handle_file
 from .forms import ImageUploadForm, ACVForm
 import os
@@ -8,6 +9,10 @@ import tempfile
 
 def landing(request):
     return render(request, 'landing.html')
+
+# @login_required
+def home(request):
+    return render(request, 'home.html')
 
 def real_or_fake(uploaded_file):
     client = Client("DevOmnino/Test")
@@ -30,6 +35,7 @@ def real_or_fake(uploaded_file):
         "filename": filename
     }
 
+@login_required
 def photo_verifier(request):
     result = None
 

@@ -1,0 +1,371 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+
+    section {
+    padding: 40px 0;
+    }
+
+    .dashboard-container {
+    padding: 40px 0;
+    }
+
+    .dashboard-header {
+    text-align: center;
+    {% comment %} margin-bottom: 60px; {% endcomment %}
+    }
+
+    .dashboard-header h1 {
+    font-size: 42px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 12px;
+    }
+
+    .dashboard-header p {
+    font-size: 18px;
+    color: #666;
+    }
+
+    {% comment %} .dashboard-section {
+    margin-bottom: 60px;
+    } {% endcomment %}
+
+    .section-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #ff6b35;
+    display: inline-block;
+    }
+
+    /* ===== PROPERTY DETAILS AND OVERVIEW ===== */
+    .property-details-grid, .policy-overview-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+    }
+
+    .detail-card, .policy-card {
+        background: #fff9f5;
+        border: 1px solid #ffe8d6;
+        border-radius: 12px;
+        padding: 24px;
+        transition: all 0.3s ease;
+    }
+
+    .detail-card:hover, .policy-card:hover {
+        background: white;
+        border-color: #ff6b35;
+    }
+
+    .detail-label, .card-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: #999;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 12px;
+    }
+
+    .detail-value, .card-value {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1a1a1a;
+        line-height: 1.5;
+    }
+
+    .card-value.large {
+        font-size: 32px;
+        color: #ff6b35;
+    }
+
+    .card-description {
+        font-size: 12px;
+        color: #999;
+        margin-top: 8px;
+    }
+
+    /* ===== COVERAGE DETAILS ===== */
+    .coverage-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+    }
+
+    .coverage-card {
+    background: white;
+    border: 1px solid #f0f0f0;
+    border-radius: 12px;
+    padding: 28px;
+    transition: all 0.3s ease;
+    text-align: center;
+    }
+
+    .coverage-card.highlight {
+    background: linear-gradient(135deg, #fff9f5 0%, #fffbf8 100%);
+    border: 2px solid #ff6b35;
+    }
+
+    .coverage-card.highlight:hover {
+    box-shadow: 0 8px 24px rgba(255, 107, 53, 0.2);
+    }
+
+    .coverage-section {
+    margin-bottom: 32px;
+    }
+
+    .subsection-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    }
+
+    .subsection-title::before {
+    content: "";
+    width: 4px;
+    height: 4px;
+    background: #ff6b35;
+    border-radius: 50%;
+    }
+
+    /* ===== RISKS LIST ===== */
+    .risks-list,
+    .addon-list,
+    .sublimits-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+    }
+
+    .risk-item,
+    .addon-item,
+    .sublimit-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: white;
+    border: 1px solid #f0f0f0;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 15px;
+    color: #1a1a1a;
+    transition: all 0.3s ease;
+    }
+
+    .risk-item:hover,
+    .addon-item:hover,
+    .sublimit-item:hover {
+    border-color: #ff6b35;
+    background: #fff9f5;
+    }
+
+    .risk-icon,
+    .addon-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+    }
+
+    .risk-icon {
+    color: #4caf50;
+    }
+
+    .addon-icon {
+    color: #ffc107;
+    }
+
+    /* ===== DASHBOARD ACTIONS ===== */
+    .dashboard-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding-top: 40px;
+    }
+
+    .dashboard-actions a {
+    text-decoration: none;
+    }
+
+    /* ===== RESPONSIVE DASHBOARD ===== */
+    @media (max-width: 768px) {
+    .dashboard-header h1 {
+        font-size: 28px;
+    }
+
+    .section-title {
+        font-size: 20px;
+    }
+
+    .policy-overview-grid,
+    .property-details-grid,
+    .coverage-summary-grid,
+    .risks-list,
+    .addon-list,
+    .sublimits-list {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-actions {
+        flex-direction: column;
+    }
+
+    .dashboard-actions a {
+        width: 100%;
+        text-align: center;
+    }
+</style>
+<main style="margin: auto; padding: 0 20px;">
+    <div class="dashboard-container">
+        <!-- Welcome Section -->
+        <div class="dashboard-header">
+        <h1>Welcome, <span id="policyholder-name">{{user.username}}</span>!</h1>
+        <p>File claims</p>
+        </div>
+
+        <!-- User & Policy Overview -->
+        <section class="dashboard-section">
+        <h2 class="section-title">Policy Overview</h2>
+        <div class="policy-overview-grid">
+            <div class="policy-card">
+            <div class="card-label">Policyholder Name</div>
+            <div class="card-value" id="name">{{user.username}}</div>
+            </div>
+            <div class="policy-card">
+            <div class="card-label">Policy Number</div>
+            <div class="card-value" id="policy-number">PL-2001234</div>
+            </div>
+            <div class="policy-card">
+            <div class="card-label">Policy Status</div>
+            <div class="card-value" id="policy-status">Active</div>
+            </div>
+            <div class="policy-card">
+            <div class="card-label">Policy Type</div>
+            <div class="card-value" id="policy-type">Home Insurance</div>
+            </div>
+            <div class="policy-card">
+            <div class="card-label">Coverage Start</div>
+            <div class="card-value" id="coverage-start">2025-01-10</div>
+            </div>
+            <div class="policy-card">
+            <div class="card-label">Coverage End</div>
+            <div class="card-value" id="coverage-end">2027-01-09</div>
+            </div>
+        </div>
+        </section>
+
+        <!-- Insured Property Details -->
+        <section class="dashboard-section">
+        <h2 class="section-title">Insured Property Details</h2>
+        <div class="property-details-grid">
+            <div class="detail-card">
+            <div class="detail-label">Property Address</div>
+            <div class="detail-value" id="property-address">1004 Kaydee Solitaire, Makrani Pada Malad(East) Mumbai:- 400097</div>
+            </div>
+            <div class="detail-card">
+            <div class="detail-label">Property Type</div>
+            <div class="detail-value" id="property-type">Residental</div>
+            </div>
+            <div class="detail-card">
+            <div class="detail-label">Construction Type</div>
+            <div class="detail-value" id="construction-type">Type II (Non-Combustible)</div>
+            </div>
+            <div class="detail-card">
+            <div class="detail-label">Year Built</div>
+            <div class="detail-value" id="year-built">2017</div>
+            </div>
+            <div class="detail-card">
+            <div class="detail-label">Usage</div>
+            <div class="detail-value" id="usage">Self Occuppied</div>
+            </div>
+        </div>
+        </section>
+
+        <!-- Coverage Details -->
+        <section class="dashboard-section">
+        <h2 class="section-title">Coverage Details</h2>
+        
+        <!-- Sum Insured & Deductible -->
+        <div class="coverage-summary-grid">
+            <div class="coverage-card highlight">
+            <div class="card-label">Sum Insured</div>
+            <div class="card-value large" id="sum-insured">₹50,00,000</div>
+            <div class="card-description">Total coverage amount</div>
+            </div>
+
+            <div class="coverage-card highlight">
+            <div class="card-label">Deductible</div>
+            <div class="card-value large" id="deductible">₹20,000</div>
+            <div class="card-description">Amount you pay per claim</div>
+            </div>
+        </div>
+
+        <!-- Covered Risks -->
+        <div class="coverage-section">
+            <h3 class="subsection-title">Covered Risks</h3>
+            <div class="risks-list" id="covered-risks">
+                <div class="risk-item">
+                    <span class="risk-icon">✓</span>
+                    <span>Home Building Cover</span>
+                </div>
+                <div class="risk-item">
+                    <span class="risk-icon">✓</span>
+                    <span>Home Contents Cover</span>
+                </div>
+                <div class="risk-item">
+                    <span class="risk-icon">✓</span>
+                    <span>Natural Disasters*</span>
+                </div>
+                <div class="risk-item">
+                    <span class="risk-icon">✓</span>
+                    <span>Theft</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add-on Covers -->
+        <div class="coverage-section">
+            <h3 class="subsection-title">Add-on Covers</h3>
+            <div class="addon-list" id="add-on-covers">
+            <div class="addon-item">
+            <span class="addon-icon">⭐</span>
+            <span>Jewellery</span>
+            </div>
+            <div class="addon-item">
+            <span class="addon-icon">⭐</span>
+            <span>Rent Protections</span>
+            </div>
+        </div>
+
+        <!-- Sub-limits -->
+        <div class="coverage-section">
+            <h3 class="subsection-title">Sub-limits</h3>
+            <div class="sublimits-list" id="sub-limits">
+                <div class="sublimit-item">
+                    <span>--</span>
+                </div>
+                <div class="sublimit-item">
+                    <span>--</span>
+                </div>
+            </div>
+        </div>
+        </section>
+
+        <!-- Action Buttons -->
+        <section class="dashboard-actions">
+            <a href="{% url 'inbox:photo_verifier' %}" class="btn-primary">File a Claim</a>
+        {% comment %} <a href="#edit" class="btn-secondary">Edit Policy</a> {% endcomment %}
+        </section>
+    </div>
+</main>
+
+{% endblock%}
+

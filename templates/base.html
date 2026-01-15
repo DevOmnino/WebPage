@@ -16,12 +16,26 @@
         <nav>
             <div class="logo">Logo</div>
             <ul class="nav-links">
-                <li><a href="{% url 'inbox:landing' %}">Home</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#how-it-works">How It Works</a></li>
-                <li><a href="#contact">Contact</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="#"> File Claim </a></li>
+                {%else%}
+                    <li><a href="{% url 'inbox:landing' %}">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                {%endif%}
+                
+                
             </ul>
-            <a href="{% url 'inbox:photo_verifier' %}" class="btn-primary" style="padding: 10px 24px;">Get Started</a>
+            {% if user.is_authenticated %}
+                <form method="POST" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-primary">Logout</button>
+                </form>
+            {%else%}
+            <a href="{% url 'login' %}" class="btn-primary" style="padding: 10px 24px;">Get Started</a>
+            {% endif %}
         </nav>
     </header>
 
@@ -41,7 +55,7 @@
                     <ul>
                         <li><a href="#features">Features</a></li>
                         <li><a href="#">Pricing</a></li>
-                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="{% url 'inbox:landing' %}">How It Works</a></li>
                         <li><a href="#">FAQ</a></li>
                         <li><a href="{% url 'inbox:acv_calculator' %}">ACV Calculator</a></li>
                     </ul>
